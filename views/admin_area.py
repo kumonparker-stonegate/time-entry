@@ -314,8 +314,7 @@ def render():
             st.session_state.page = "home"
             st.rerun()
 
-    st.markdown("<hr style='border:none;border-top:1px solid #ADE3F6;margin:0.5rem 0 1rem;'>",
-                unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom:0.5rem;'></div>", unsafe_allow_html=True)
 
     tab1, tab2, tab3, tab4 = st.tabs(["  Dashboard  ", "  Hours  ", "  Reports  ", "  Employees  "])
 
