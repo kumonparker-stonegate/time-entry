@@ -158,6 +158,43 @@ def _tab_hours():
         st.success("Changes saved.")
         st.rerun()
 
+    st.markdown("<hr style='border:none;border-top:1px solid #ADE3F6;margin:1.5rem 0 1rem;'>",
+                unsafe_allow_html=True)
+    st.markdown("#### Add Manual Entry")
+    st.caption("Use this if an employee forgot to clock in or out.")
+
+    with st.form("add_entry_form", clear_on_submit=True):
+        all_employees = db.get_active_employees()
+        emp_names = [e["name"] for e in all_employees]
+        col_a, col_b = st.columns(2)
+        with col_a:
+            ae_name = st.selectbox("Employee", emp_names, key="ae_name")
+        with col_b:
+            ae_date = st.date_input("Date", value=date.today(), key="ae_date")
+
+        col_c, col_d = st.columns(2)
+        with col_c:
+            ae_clock_in = st.time_input("Clock In", value=None, key="ae_ci")
+        with col_d:
+            ae_clock_out = st.time_input("Clock Out (leave blank if still in)", value=None, key="ae_co")
+
+        submitted = st.form_submit_button("Add Entry", type="primary")
+
+    if submitted:
+        if ae_clock_in is None:
+            st.error("Clock In time is required.")
+        else:
+            match = next((e for e in all_employees if e["name"] == ae_name), None)
+            if match:
+                ci_dt = datetime.combine(ae_date, ae_clock_in).replace(tzinfo=tz).astimezone(pytz.utc)
+                co_dt = datetime.combine(ae_date, ae_clock_out).replace(tzinfo=tz).astimezone(pytz.utc) if ae_clock_out else None
+                if co_dt and co_dt <= ci_dt:
+                    st.error("Clock Out must be after Clock In.")
+                else:
+                    db.add_time_entry(match["id"], ci_dt, co_dt)
+                    st.success(f"Entry added for {ae_name}.")
+                    st.rerun()
+
 
 # ── Tab: Reports ──────────────────────────────────────────────────────────────
 

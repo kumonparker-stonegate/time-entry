@@ -122,6 +122,13 @@ def get_time_entries(employee_id: str | None = None, start_date=None, end_date=N
     return q.order("clock_in", desc=True).execute().data
 
 
+def add_time_entry(employee_id: str, clock_in: datetime, clock_out: datetime | None):
+    data = {"employee_id": employee_id, "clock_in": clock_in.isoformat()}
+    if clock_out:
+        data["clock_out"] = clock_out.isoformat()
+    get_client().table("time_entries").insert(data).execute()
+
+
 def update_time_entry(entry_id: str, clock_in: datetime, clock_out: datetime | None):
     data = {"clock_in": clock_in.isoformat()}
     data["clock_out"] = clock_out.isoformat() if clock_out else None
