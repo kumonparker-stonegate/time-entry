@@ -38,6 +38,10 @@ div.stSelectbox > div > div > div {
     color: #1A3A6B !important;
 }
 
+/* ── Global text color (overrides dark mode) ─────────────────────────────── */
+.stApp, .stApp p, .stApp li, .stApp span,
+.stMarkdown, .stMarkdown p { color: #1A3A6B; }
+
 /* ── Labels ───────────────────────────────────────────────────────────────── */
 div.stTextInput > label, div.stSelectbox > label,
 div.stDateInput > label, div.stMultiSelect > label {
