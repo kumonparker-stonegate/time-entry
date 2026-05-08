@@ -7,18 +7,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Hide sidebar toggle and default Streamlit menu for a cleaner look
-st.markdown(
-    """
-    <style>
-    #MainMenu { visibility: hidden; }
-    header { visibility: hidden; }
-    [data-testid="collapsedControl"] { display: none; }
-    .block-container { padding-top: 3rem; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+from utils.styles import inject
+inject()
 
 # ── Session state defaults ─────────────────────────────────────────────────────
 for key, default in [
@@ -26,6 +16,11 @@ for key, default in [
     ("employee_id", None),
     ("employee_name", None),
     ("admin_logged_in", False),
+    ("emp_action_done", False),
+    ("emp_action_type", None),
+    ("emp_action_time", None),
+    ("emp_action_name", None),
+    ("emp_selected_name", None),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default

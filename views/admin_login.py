@@ -3,19 +3,41 @@ import utils.auth as auth
 
 
 def render():
-    _, col, _ = st.columns([1, 1.6, 1])
+    _, col, _ = st.columns([1, 1.4, 1])
     with col:
-        st.markdown("### Admin Login")
+        st.markdown(
+            """
+            <div style="text-align:center;margin-bottom:1.8rem;">
+                <span style="
+                    background:#003087;color:white;font-size:0.75rem;
+                    font-weight:800;letter-spacing:0.18em;
+                    padding:0.25rem 0.7rem;border-radius:4px;
+                ">KUMON</span>
+                <h2 style="color:#003087;font-size:1.5rem;font-weight:700;margin:0.6rem 0 0;">
+                    Admin Login
+                </h2>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         if auth.is_locked_out("admin"):
             secs = auth.lockout_seconds_remaining("admin")
             st.error(f"Too many failed attempts. Please wait {secs // 60}m {secs % 60}s.")
-            if st.button("← Back"):
+            if st.button("← Back to Home", type="secondary", use_container_width=True):
                 st.session_state.page = "home"
                 st.rerun()
             return
 
-        password = st.text_input("Admin password", type="password")
+        st.markdown(
+            """
+            <div style="background:white;border:1px solid #C8D4EF;border-radius:12px;
+                        padding:2rem;box-shadow:0 2px 12px rgba(0,48,135,0.08);">
+            """,
+            unsafe_allow_html=True,
+        )
+
+        password = st.text_input("Admin password", type="password", placeholder="Enter admin password")
 
         if st.button("Log In", type="primary", use_container_width=True):
             if not password:
@@ -27,10 +49,12 @@ def render():
                 st.rerun()
             else:
                 auth.record_failed_attempt("admin")
-                remaining = 5 - st.session_state.get("_failed_admin", 0)
-                st.error(f"Incorrect password. {remaining} attempt(s) remaining before lockout.")
+                remaining = max(0, 5 - st.session_state.get("_failed_admin", 0))
+                st.error(f"Incorrect password. {remaining} attempt(s) left before lockout.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("← Back", use_container_width=True):
+        if st.button("← Back to Home", type="tertiary", use_container_width=True):
             st.session_state.page = "home"
             st.rerun()

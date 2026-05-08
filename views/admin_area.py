@@ -293,14 +293,31 @@ def _tab_employees():
 def render():
     col1, col2 = st.columns([5, 1])
     with col1:
-        st.markdown("### Admin Panel")
+        st.markdown(
+            """
+            <div style="margin-bottom:0.3rem;">
+                <span style="
+                    background:#003087;color:white;font-size:0.75rem;
+                    font-weight:800;letter-spacing:0.18em;
+                    padding:0.25rem 0.7rem;border-radius:4px;
+                ">KUMON</span>
+                <span style="color:#003087;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
+                    Admin Panel
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
     with col2:
-        if st.button("Log Out", use_container_width=True):
+        if st.button("Log Out", type="secondary", use_container_width=True):
             st.session_state.admin_logged_in = False
             st.session_state.page = "home"
             st.rerun()
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Dashboard", "Hours", "Reports", "Employees"])
+    st.markdown("<hr style='border:none;border-top:1px solid #C8D4EF;margin:0.5rem 0 1rem;'>",
+                unsafe_allow_html=True)
+
+    tab1, tab2, tab3, tab4 = st.tabs(["  Dashboard  ", "  Hours  ", "  Reports  ", "  Employees  "])
 
     with tab1:
         _tab_dashboard()

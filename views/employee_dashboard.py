@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 import pytz
 import utils.database as db
 
@@ -19,47 +19,34 @@ def render():
     # ── Header ────────────────────────────────────────────────────────────────
     col1, col2 = st.columns([5, 1])
     with col1:
-        st.markdown(f"### Welcome, {emp_name}")
+        st.markdown(
+            f"""
+            <div style="margin-bottom:0.5rem;">
+                <span style="
+                    background:#003087;color:white;font-size:0.75rem;
+                    font-weight:800;letter-spacing:0.18em;
+                    padding:0.25rem 0.7rem;border-radius:4px;
+                ">KUMON</span>
+                <span style="color:#003087;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
+                    My Hours — {emp_name}
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
     with col2:
-        if st.button("Log Out", use_container_width=True):
+        if st.button("← Back", type="secondary", use_container_width=True):
             st.session_state.employee_id = None
             st.session_state.employee_name = None
-            st.session_state.page = "home"
+            st.session_state.page = "employee_login"
             st.rerun()
 
-    st.markdown("---")
+    st.markdown("<hr style='border:none;border-top:1px solid #C8D4EF;margin:0.8rem 0 1.2rem;'>",
+                unsafe_allow_html=True)
 
-    # ── Clock in/out status ───────────────────────────────────────────────────
-    clocked_in = db.is_clocked_in(emp_id)
-    open_entry = db.get_open_entry(emp_id) if clocked_in else None
-
-    if clocked_in and open_entry:
-        ci_dt = datetime.fromisoformat(open_entry["clock_in"])
-        if ci_dt.tzinfo is None:
-            ci_dt = pytz.utc.localize(ci_dt)
-        ci_local = ci_dt.astimezone(tz)
-        elapsed = datetime.now(pytz.utc) - ci_dt
-        elapsed_str = _fmt_duration(elapsed.total_seconds())
-
-        st.success(f"You are **clocked in** since {ci_local.strftime('%I:%M %p')} — {elapsed_str} elapsed")
-        if st.button("Clock Out", type="primary", use_container_width=True):
-            db.clock_out(emp_id)
-            st.success("You have clocked out. See you next time!")
-            st.rerun()
-    else:
-        st.info("You are **clocked out**.")
-        if st.button("Clock In", type="primary", use_container_width=True):
-            db.clock_in(emp_id)
-            st.success("You are now clocked in!")
-            st.rerun()
-
-    st.markdown("---")
-
-    # ── Hours history ─────────────────────────────────────────────────────────
-    st.markdown("#### My Hours")
-
-    col_a, col_b = st.columns(2)
+    # ── Filters ───────────────────────────────────────────────────────────────
     today = date.today()
+    col_a, col_b = st.columns(2)
     with col_a:
         start = st.date_input("From", value=today.replace(day=1))
     with col_b:
@@ -75,7 +62,7 @@ def render():
     entries = db.get_time_entries(employee_id=emp_id, start_date=start_dt, end_date=end_dt)
 
     if not entries:
-        st.write("No entries found for this period.")
+        st.info("No entries found for this period.")
         return
 
     rows = []
@@ -99,6 +86,17 @@ def render():
             "Duration": _fmt_duration(secs) if secs else "—",
         })
 
-    df = pd.DataFrame(rows)
-    st.dataframe(df, use_container_width=True, hide_index=True)
-    st.markdown(f"**Total hours: {_fmt_duration(total_secs)}**")
+    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+    st.markdown(
+        f"""
+        <div style="background:#EEF3FF;border:1px solid #C8D4EF;border-radius:8px;
+                    padding:0.8rem 1.2rem;margin-top:0.5rem;display:inline-block;">
+            <span style="color:#003087;font-weight:700;">Total: {_fmt_duration(total_secs)}</span>
+            <span style="color:#667;font-size:0.88rem;margin-left:0.75rem;">
+                ({len([r for r in rows if r['Clock Out'] != 'Still clocked in'])} shifts)
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
