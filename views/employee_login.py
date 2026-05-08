@@ -8,23 +8,19 @@ import utils.database as db
 def _header():
     st.markdown(
         """
-        <div style="margin-bottom:1.5rem;">
+        <div style="margin-bottom:1.2rem;">
             <span style="
-                background:#003087;color:white;font-size:0.75rem;
+                background:#6DCFF6;color:#1A3A6B;font-size:0.75rem;
                 font-weight:800;letter-spacing:0.18em;
                 padding:0.25rem 0.7rem;border-radius:4px;
             ">KUMON</span>
-            <span style="color:#003087;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
+            <span style="color:#1A3A6B;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
                 Employee Clock-In
             </span>
         </div>
         """,
         unsafe_allow_html=True,
     )
-
-
-def _divider():
-    st.markdown("<hr style='border:none;border-top:1px solid #C8D4EF;margin:1.2rem 0;'>", unsafe_allow_html=True)
 
 
 def render():
@@ -53,10 +49,10 @@ def render():
             if action == "clock_in":
                 st.markdown(
                     f"""
-                    <div style="background:#EEF3FF;border:1px solid #C8D4EF;border-radius:10px;
+                    <div style="background:#E8F7FD;border:1px solid #ADE3F6;border-radius:10px;
                                 padding:1.5rem;text-align:center;margin-bottom:1rem;">
                         <div style="font-size:2rem;margin-bottom:0.5rem;">✓</div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#003087;">
+                        <div style="font-size:1.1rem;font-weight:700;color:#1A3A6B;">
                             Clocked in at {ts_local}
                         </div>
                         <div style="color:#555;margin-top:0.3rem;">Have a great shift, {name}!</div>
@@ -67,10 +63,10 @@ def render():
             else:
                 st.markdown(
                     f"""
-                    <div style="background:#EEF3FF;border:1px solid #C8D4EF;border-radius:10px;
+                    <div style="background:#E8F7FD;border:1px solid #ADE3F6;border-radius:10px;
                                 padding:1.5rem;text-align:center;margin-bottom:1rem;">
                         <div style="font-size:2rem;margin-bottom:0.5rem;">👋</div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#003087;">
+                        <div style="font-size:1.1rem;font-weight:700;color:#1A3A6B;">
                             Clocked out at {ts_local}
                         </div>
                         <div style="color:#555;margin-top:0.3rem;">See you next time, {name}!</div>
@@ -81,7 +77,7 @@ def render():
 
             c1, c2 = st.columns(2)
             with c1:
-                if st.button("View My Hours", use_container_width=True, type="primary"):
+                if st.button("View Hours", use_container_width=True, type="primary"):
                     st.session_state.page = "employee_dashboard"
                     st.session_state.emp_action_done = False
                     st.rerun()
@@ -105,44 +101,47 @@ def render():
 
         names = [e["name"] for e in employees]
 
-        # Reset action state on name change
         if "emp_selected_name" not in st.session_state:
             st.session_state.emp_selected_name = names[0]
 
-        name = st.selectbox("Your name", names, index=names.index(st.session_state.emp_selected_name)
-                            if st.session_state.emp_selected_name in names else 0)
-
+        name = st.selectbox(
+            "Your name",
+            names,
+            index=names.index(st.session_state.emp_selected_name)
+            if st.session_state.emp_selected_name in names else 0,
+        )
         if name != st.session_state.emp_selected_name:
             st.session_state.emp_selected_name = name
 
-        # Check current status (no auth needed) to label the button
         emp_record = next((e for e in employees if e["name"] == name), None)
         currently_in = db.is_clocked_in(emp_record["id"]) if emp_record else False
 
         if currently_in:
             st.markdown(
-                "<div style='color:#2E7D32;font-size:0.88rem;font-weight:600;margin:-0.3rem 0 0.8rem;'>"
+                "<div style='color:#1A8A3A;font-size:0.88rem;font-weight:600;margin:-0.2rem 0 0.5rem;'>"
                 "● Currently clocked in</div>",
                 unsafe_allow_html=True,
             )
         else:
             st.markdown(
-                "<div style='color:#888;font-size:0.88rem;font-weight:600;margin:-0.3rem 0 0.8rem;'>"
+                "<div style='color:#888;font-size:0.88rem;font-weight:600;margin:-0.2rem 0 0.5rem;'>"
                 "○ Currently clocked out</div>",
                 unsafe_allow_html=True,
             )
 
         password = st.text_input("Password", type="password", placeholder="Enter your password")
 
-        _divider()
+        st.markdown(
+            "<hr style='border:none;border-top:1px solid #ADE3F6;margin:0.8rem 0;'>",
+            unsafe_allow_html=True,
+        )
 
         btn_label = "Clock Out" if currently_in else "Clock In"
         c1, c2 = st.columns(2)
-
         with c1:
             clock_clicked = st.button(btn_label, type="primary", use_container_width=True)
         with c2:
-            hours_clicked = st.button("View My Hours", type="secondary", use_container_width=True)
+            hours_clicked = st.button("View Hours", type="secondary", use_container_width=True)
 
         if clock_clicked or hours_clicked:
             if not password:
@@ -162,17 +161,15 @@ def render():
                         st.session_state.emp_action_done = False
                         st.session_state.page = "employee_dashboard"
                         st.rerun()
-
                     elif clock_clicked:
                         now = datetime.now(pytz.utc)
                         if currently_in:
                             db.clock_out(employee["id"])
-                            st.session_state.emp_action_done = True
                             st.session_state.emp_action_type = "clock_out"
                         else:
                             db.clock_in(employee["id"])
-                            st.session_state.emp_action_done = True
                             st.session_state.emp_action_type = "clock_in"
+                        st.session_state.emp_action_done = True
                         st.session_state.emp_action_time = now
                         st.session_state.emp_action_name = employee["name"]
                         st.rerun()

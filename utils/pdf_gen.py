@@ -8,9 +8,9 @@ from datetime import datetime
 from collections import defaultdict
 import pytz
 
-BLUE = colors.HexColor("#003087")
-LIGHT_BLUE = colors.HexColor("#e8f0fe")
-ALT_ROW = colors.HexColor("#f5f7ff")
+BLUE = colors.HexColor("#1A3A6B")
+LIGHT_BLUE = colors.HexColor("#E8F7FD")
+ALT_ROW = colors.HexColor("#F0FAFF")
 
 
 def _dur(seconds: float) -> str:

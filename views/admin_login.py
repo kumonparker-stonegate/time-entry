@@ -9,11 +9,11 @@ def render():
             """
             <div style="text-align:center;margin-bottom:1.8rem;">
                 <span style="
-                    background:#003087;color:white;font-size:0.75rem;
+                    background:#6DCFF6;color:#1A3A6B;font-size:0.75rem;
                     font-weight:800;letter-spacing:0.18em;
                     padding:0.25rem 0.7rem;border-radius:4px;
                 ">KUMON</span>
-                <h2 style="color:#003087;font-size:1.5rem;font-weight:700;margin:0.6rem 0 0;">
+                <h2 style="color:#1A3A6B;font-size:1.5rem;font-weight:700;margin:0.6rem 0 0;">
                     Admin Login
                 </h2>
             </div>
@@ -31,7 +31,7 @@ def render():
 
         st.markdown(
             """
-            <div style="background:white;border:1px solid #C8D4EF;border-radius:12px;
+            <div style="background:white;border:1px solid #ADE3F6;border-radius:12px;
                         padding:2rem;box-shadow:0 2px 12px rgba(0,48,135,0.08);">
             """,
             unsafe_allow_html=True,

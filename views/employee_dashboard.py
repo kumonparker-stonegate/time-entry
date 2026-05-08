@@ -23,11 +23,11 @@ def render():
             f"""
             <div style="margin-bottom:0.5rem;">
                 <span style="
-                    background:#003087;color:white;font-size:0.75rem;
+                    background:#6DCFF6;color:#1A3A6B;font-size:0.75rem;
                     font-weight:800;letter-spacing:0.18em;
                     padding:0.25rem 0.7rem;border-radius:4px;
                 ">KUMON</span>
-                <span style="color:#003087;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
+                <span style="color:#1A3A6B;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
                     My Hours — {emp_name}
                 </span>
             </div>
@@ -41,7 +41,7 @@ def render():
             st.session_state.page = "employee_login"
             st.rerun()
 
-    st.markdown("<hr style='border:none;border-top:1px solid #C8D4EF;margin:0.8rem 0 1.2rem;'>",
+    st.markdown("<hr style='border:none;border-top:1px solid #ADE3F6;margin:0.8rem 0 1.2rem;'>",
                 unsafe_allow_html=True)
 
     # ── Filters ───────────────────────────────────────────────────────────────
@@ -90,9 +90,9 @@ def render():
 
     st.markdown(
         f"""
-        <div style="background:#EEF3FF;border:1px solid #C8D4EF;border-radius:8px;
+        <div style="background:#E8F7FD;border:1px solid #ADE3F6;border-radius:8px;
                     padding:0.8rem 1.2rem;margin-top:0.5rem;display:inline-block;">
-            <span style="color:#003087;font-weight:700;">Total: {_fmt_duration(total_secs)}</span>
+            <span style="color:#1A3A6B;font-weight:700;">Total: {_fmt_duration(total_secs)}</span>
             <span style="color:#667;font-size:0.88rem;margin-left:0.75rem;">
                 ({len([r for r in rows if r['Clock Out'] != 'Still clocked in'])} shifts)
             </span>

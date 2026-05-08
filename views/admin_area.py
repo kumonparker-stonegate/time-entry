@@ -297,11 +297,11 @@ def render():
             """
             <div style="margin-bottom:0.3rem;">
                 <span style="
-                    background:#003087;color:white;font-size:0.75rem;
+                    background:#6DCFF6;color:#1A3A6B;font-size:0.75rem;
                     font-weight:800;letter-spacing:0.18em;
                     padding:0.25rem 0.7rem;border-radius:4px;
                 ">KUMON</span>
-                <span style="color:#003087;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
+                <span style="color:#1A3A6B;font-size:1.3rem;font-weight:700;margin-left:0.75rem;">
                     Admin Panel
                 </span>
             </div>
@@ -314,7 +314,7 @@ def render():
             st.session_state.page = "home"
             st.rerun()
 
-    st.markdown("<hr style='border:none;border-top:1px solid #C8D4EF;margin:0.5rem 0 1rem;'>",
+    st.markdown("<hr style='border:none;border-top:1px solid #ADE3F6;margin:0.5rem 0 1rem;'>",
                 unsafe_allow_html=True)
 
     tab1, tab2, tab3, tab4 = st.tabs(["  Dashboard  ", "  Hours  ", "  Reports  ", "  Employees  "])
