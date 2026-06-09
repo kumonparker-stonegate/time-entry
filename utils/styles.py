@@ -50,7 +50,8 @@ div.stDateInput > label, div.stMultiSelect > label {
 }
 
 /* ── Primary buttons ──────────────────────────────────────────────────────── */
-div.stButton > button[kind="primary"] {
+div.stButton > button[kind="primary"],
+[data-testid="baseButton-primary"] {
     background-color: #6DCFF6 !important;
     color: #1A3A6B !important;
     border: none !important;
@@ -61,15 +62,18 @@ div.stButton > button[kind="primary"] {
     box-shadow: 0 2px 8px rgba(109,207,246,0.4) !important;
     transition: all 0.18s ease !important;
 }
-div.stButton > button[kind="primary"]:hover {
+div.stButton > button[kind="primary"]:hover,
+[data-testid="baseButton-primary"]:hover {
     background-color: #4BBFE8 !important;
     box-shadow: 0 4px 12px rgba(109,207,246,0.5) !important;
     transform: translateY(-1px) !important;
 }
-div.stButton > button[kind="primary"]:active { transform: translateY(0) !important; }
+div.stButton > button[kind="primary"]:active,
+[data-testid="baseButton-primary"]:active { transform: translateY(0) !important; }
 
 /* ── Secondary buttons ────────────────────────────────────────────────────── */
-div.stButton > button[kind="secondary"] {
+div.stButton > button[kind="secondary"],
+[data-testid="baseButton-secondary"] {
     background-color: white !important;
     color: #1A3A6B !important;
     border: 2px solid #6DCFF6 !important;
@@ -79,12 +83,15 @@ div.stButton > button[kind="secondary"] {
     padding: 0.5rem 1.5rem !important;
     transition: all 0.18s ease !important;
 }
-div.stButton > button[kind="secondary"]:hover {
+div.stButton > button[kind="secondary"]:hover,
+[data-testid="baseButton-secondary"]:hover {
     background-color: #E8F7FD !important;
 }
 
 /* ── Tertiary / plain buttons ─────────────────────────────────────────────── */
-div.stButton > button[kind="tertiary"] {
+div.stButton > button[kind="tertiary"],
+[data-testid="baseButton-tertiary"] {
+    background-color: white !important;
     color: #1A3A6B !important;
     font-weight: 500 !important;
     padding: 0.3rem 0.5rem !important;

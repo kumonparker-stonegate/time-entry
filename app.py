@@ -1,4 +1,5 @@
 import streamlit as st
+import httpx
 
 st.set_page_config(
     page_title="Kumon Time Entry",
@@ -28,34 +29,44 @@ for key, default in [
 # ── Router ─────────────────────────────────────────────────────────────────────
 page = st.session_state.page
 
-if page == "home":
-    from views.home import render
-    render()
-
-elif page == "employee_login":
-    from views.employee_login import render
-    render()
-
-elif page == "employee_dashboard":
-    if not st.session_state.employee_id:
-        st.session_state.page = "employee_login"
+def _db_error():
+    st.error("Unable to connect to the database. Please refresh the page.")
+    st.caption("If this keeps happening, the database may be temporarily unavailable.")
+    if st.button("Refresh"):
         st.rerun()
-    else:
-        from views.employee_dashboard import render
+
+try:
+    if page == "home":
+        from views.home import render
         render()
 
-elif page == "admin_login":
-    from views.admin_login import render
-    render()
-
-elif page == "admin_area":
-    if not st.session_state.admin_logged_in:
-        st.session_state.page = "admin_login"
-        st.rerun()
-    else:
-        from views.admin_area import render
+    elif page == "employee_login":
+        from views.employee_login import render
         render()
 
-else:
-    st.session_state.page = "home"
-    st.rerun()
+    elif page == "employee_dashboard":
+        if not st.session_state.employee_id:
+            st.session_state.page = "employee_login"
+            st.rerun()
+        else:
+            from views.employee_dashboard import render
+            render()
+
+    elif page == "admin_login":
+        from views.admin_login import render
+        render()
+
+    elif page == "admin_area":
+        if not st.session_state.admin_logged_in:
+            st.session_state.page = "admin_login"
+            st.rerun()
+        else:
+            from views.admin_area import render
+            render()
+
+    else:
+        st.session_state.page = "home"
+        st.rerun()
+
+except httpx.ConnectError:
+    _db_error()
