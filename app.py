@@ -28,9 +28,12 @@ for key, default in [
 # ── Router ─────────────────────────────────────────────────────────────────────
 page = st.session_state.page
 
-def _db_error():
+def _db_error(e: Exception | None = None):
     st.error("Unable to connect to the database. Please refresh the page.")
     st.caption("If this keeps happening, the database may be temporarily unavailable.")
+    if e is not None:
+        with st.expander("Error details"):
+            st.code(f"{type(e).__name__}: {e}")
     if st.button("Refresh"):
         st.rerun()
 
@@ -68,7 +71,4 @@ try:
         st.rerun()
 
 except Exception as e:
-    if type(e).__name__ in ("ConnectError", "APIError"):
-        _db_error()
-    else:
-        raise
+    _db_error(e)
