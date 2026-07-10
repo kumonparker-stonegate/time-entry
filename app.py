@@ -1,5 +1,4 @@
 import streamlit as st
-import httpx
 
 st.set_page_config(
     page_title="Kumon Time Entry",
@@ -68,5 +67,8 @@ try:
         st.session_state.page = "home"
         st.rerun()
 
-except httpx.ConnectError:
-    _db_error()
+except Exception as e:
+    if type(e).__name__ in ("ConnectError", "APIError"):
+        _db_error()
+    else:
+        raise
